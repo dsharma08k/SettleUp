@@ -153,7 +153,7 @@ export async function createExpense(
       title: expenseData.title,
       amount: expenseData.amount,
       currency: 'INR',
-      category: expenseData.category || null,
+      category: expenseData.category || undefined,
       paid_by: expenseData.paidBy,
       date: now,
       group_id: expenseData.groupId,
