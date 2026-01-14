@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/AuthContext';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Card } from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Card from '@/components/ui/Card';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -50,10 +50,10 @@ export default function LoginPage() {
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <h1 className="text-5xl font-bold text-vintage-amber mb-3">
+                    <h1 className="text-5xl font-bold text-gradient mb-3">
                         SettleUp
                     </h1>
-                    <p className="text-vintage-black/70 text-lg">
+                    <p className="text-text-muted text-lg">
                         Welcome back! Sign in to continue.
                     </p>
                 </div>
@@ -96,11 +96,11 @@ export default function LoginPage() {
                     </form>
 
                     <div className="mt-6 text-center">
-                        <p className="text-sm text-vintage-black/70">
+                        <p className="text-sm text-text-muted">
                             Don't have an account?{' '}
                             <Link
                                 href="/signup"
-                                className="text-vintage-amber hover:text-vintage-amber-dark font-medium"
+                                className="text-primary hover:text-primary-light font-medium"
                             >
                                 Sign up
                             </Link>

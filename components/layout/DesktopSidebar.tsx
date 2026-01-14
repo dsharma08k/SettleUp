@@ -1,39 +1,33 @@
 'use client';
 
-import { Home, Users, User as UserIcon, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { LayoutDashboard, Users, User, LogOut } from 'lucide-react';
 import { useAuth } from '@/lib/auth/AuthContext';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import SyncStatusBadge from './SyncStatusBadge';
 
-export function DesktopSidebar() {
+export default function DesktopSidebar() {
     const pathname = usePathname();
-    const { signOut, user } = useAuth();
-    const router = useRouter();
+    const { signOut } = useAuth();
 
     const navItems = [
-        { href: '/dashboard', label: 'Dashboard', icon: Home },
+        { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { href: '/dashboard/groups', label: 'Groups', icon: Users },
-        { href: '/dashboard/profile', label: 'Profile', icon: UserIcon },
+        { href: '/dashboard/profile', label: 'Profile', icon: User },
     ];
 
     const handleSignOut = async () => {
         await signOut();
-        toast.success('Signed out successfully');
-        router.push('/login');
     };
 
     return (
-        <aside className="hidden md:flex md:flex-col w-64 bg-white border-r border-vintage-amber/20 min-h-screen">
-            <div className="p-6">
-                <h1 className="text-3xl font-bold text-vintage-amber mb-2">SettleUp</h1>
-                <p className="text-sm text-vintage-black/60">
-                    {user?.user_metadata?.name || user?.email}
-                </p>
+        <aside className="hidden md:flex md:flex-col w-64 bg-surface border-r border-border min-h-screen">
+            <div className="p-6 border-b border-border">
+                <h1 className="text-3xl font-bold text-gradient mb-2">SettleUp</h1>
+                <p className="text-sm text-text-muted">Expense Tracker</p>
             </div>
 
-            <nav className="flex-1 px-4">
+            <nav className="flex-1 p-4 space-y-2">
                 {navItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
@@ -42,10 +36,13 @@ export function DesktopSidebar() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-vintage mb-2 transition-colors ${isActive
-                                    ? 'bg-vintage-amber text-white shadow-vintage'
-                                    : 'text-vintage-black/70 hover:bg-vintage-amber/10 hover:text-vintage-amber'
-                                }`}
+                            className={`
+                                flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
+                                ${isActive
+                                    ? 'bg-primary text-background shadow-lg shadow-primary/20'
+                                    : 'text-text-muted hover:bg-surface-light hover:text-primary'
+                                }
+                            `}
                         >
                             <Icon className="w-5 h-5" />
                             <span className="font-medium">{item.label}</span>
@@ -54,10 +51,11 @@ export function DesktopSidebar() {
                 })}
             </nav>
 
-            <div className="p-4 border-t border-vintage-amber/20">
+            <div className="p-4 border-t border-border space-y-3">
+                <SyncStatusBadge />
                 <button
                     onClick={handleSignOut}
-                    className="flex items-center gap-3 px-4 py-3 w-full rounded-vintage text-vintage-black/70 hover:bg-red-50 hover:text-red-600 transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 w-full text-text-muted hover:bg-red-500/10 hover:text-red-400 rounded-lg transition-colors"
                 >
                     <LogOut className="w-5 h-5" />
                     <span className="font-medium">Sign Out</span>

@@ -3,16 +3,18 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/AuthContext';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Card } from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Card from '@/components/ui/Card';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { Mail, CheckCircle2 } from 'lucide-react';
 
 export default function SignUpPage() {
     const router = useRouter();
     const { signUp } = useAuth();
     const [loading, setLoading] = useState(false);
+    const [showEmailVerification, setShowEmailVerification] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -53,19 +55,66 @@ export default function SignUpPage() {
             toast.error(error.message || 'Failed to create account');
             setLoading(false);
         } else {
-            toast.success('Account created! Please check your email to verify.');
-            router.push('/login');
+            setShowEmailVerification(true);
+            setLoading(false);
+            toast.success('Verification email sent! Check your inbox.');
         }
     };
+
+    if (showEmailVerification) {
+        return (
+            <div className="min-h-screen flex items-center justify-center p-4">
+                <div className="w-full max-w-md">
+                    <Card variant="light" className="text-center">
+                        <div className="flex justify-center mb-4">
+                            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                                <Mail className="w-8 h-8 text-primary" />
+                            </div>
+                        </div>
+
+                        <h2 className="text-2xl font-bold text-text mb-2">Check Your Email</h2>
+                        <p className="text-text-muted mb-6">
+                            We've sent a verification link to <strong className="text-text">{formData.email}</strong>
+                        </p>
+
+                        <div className="bg-surface/50 rounded-lg p-4 mb-6 text-left space-y-2">
+                            <div className="flex items-start gap-2">
+                                <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                                <p className="text-sm text-text-muted">
+                                    Click the link in the email to verify your account
+                                </p>
+                            </div>
+                            <div className="flex items-start gap-2">
+                                <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                                <p className="text-sm text-text-muted">
+                                    After verification, you can sign in
+                                </p>
+                            </div>
+                        </div>
+
+                        <p className="text-sm text-text-dim mb-4">
+                            Didn't receive the email? Check your spam folder.
+                        </p>
+
+                        <Link href="/login">
+                            <Button variant="primary" size="lg" className="w-full">
+                                Go to Sign In
+                            </Button>
+                        </Link>
+                    </Card>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <h1 className="text-5xl font-bold text-vintage-amber mb-3">
+                    <h1 className="text-5xl font-bold text-gradient mb-3">
                         SettleUp
                     </h1>
-                    <p className="text-vintage-black/70 text-lg">
+                    <p className="text-text-muted text-lg">
                         Create your account to get started.
                     </p>
                 </div>
@@ -132,11 +181,11 @@ export default function SignUpPage() {
                     </form>
 
                     <div className="mt-6 text-center">
-                        <p className="text-sm text-vintage-black/70">
+                        <p className="text-sm text-text-muted">
                             Already have an account?{' '}
                             <Link
                                 href="/login"
-                                className="text-vintage-amber hover:text-vintage-amber-dark font-medium"
+                                className="text-primary hover:text-primary-light font-medium"
                             >
                                 Sign in
                             </Link>

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth/AuthContext';
-import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
 import { useSyncStore } from '@/stores/syncStore';
 import { User, LogOut, Wifi, WifiOff, RefreshCw, Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -23,21 +23,24 @@ export default function ProfilePage() {
 
     return (
         <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl font-bold text-vintage-amber mb-8">Profile</h1>
+            <h1 className="text-4xl font-bold text-text mb-2">
+                <span className="text-gradient">Profile</span>
+            </h1>
+            <p className="text-text-muted mb-8">Manage your account and sync settings</p>
 
             <div className="space-y-6">
                 {/* User Info Card */}
                 <Card>
                     <div className="flex items-start gap-6">
-                        <div className="p-4 bg-vintage-amber/20 rounded-vintage">
-                            <User className="w-12 h-12 text-vintage-amber" />
+                        <div className="p-4 bg-primary/10 rounded-lg">
+                            <User className="w-12 h-12 text-primary" />
                         </div>
                         <div className="flex-1">
-                            <h2 className="text-2xl font-semibold text-vintage-black mb-2">
+                            <h2 className="text-2xl font-semibold text-text mb-2">
                                 {user?.user_metadata?.name || 'User'}
                             </h2>
-                            <p className="text-vintage-black/70">{user?.email}</p>
-                            <p className="text-sm text-vintage-black/50 mt-2">
+                            <p className="text-text-muted">{user?.email}</p>
+                            <p className="text-sm text-text-dim mt-2">
                                 Member since {user?.created_at && formatDistanceToNow(new Date(user.created_at), { addSuffix: true })}
                             </p>
                         </div>
@@ -46,42 +49,42 @@ export default function ProfilePage() {
 
                 {/* Sync Status Card */}
                 <Card>
-                    <h3 className="text-xl font-semibold text-vintage-black mb-4">Sync Status</h3>
+                    <h3 className="text-xl font-semibold text-text mb-4">Sync Status</h3>
 
                     <div className="space-y-4">
                         {/* Online Status */}
-                        <div className="flex items-center justify-between p-4 bg-vintage-cream/50 rounded-vintage">
+                        <div className="flex items-center justify-between p-4 bg-surface-light rounded-lg border border-border">
                             <div className="flex items-center gap-3">
                                 {isOnline ? (
                                     <>
-                                        <Wifi className="w-5 h-5 text-green-600" />
-                                        <span className="text-vintage-black">Online</span>
+                                        <Wifi className="w-5 h-5 text-green-400" />
+                                        <span className="text-text">Online</span>
                                     </>
                                 ) : (
                                     <>
-                                        <WifiOff className="w-5 h-5 text-red-600" />
-                                        <span className="text-vintage-black">Offline</span>
+                                        <WifiOff className="w-5 h-5 text-red-400" />
+                                        <span className="text-text">Offline</span>
                                     </>
                                 )}
                             </div>
-                            <div className={`w-3 h-3 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+                            <div className={`w-3 h-3 rounded-full ${isOnline ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`} />
                         </div>
 
                         {/* Sync Status */}
                         {isSyncing && (
-                            <div className="flex items-center gap-3 p-4 bg-vintage-amber/10 rounded-vintage">
-                                <RefreshCw className="w-5 h-5 text-vintage-amber animate-spin" />
-                                <span className="text-vintage-black">Syncing data...</span>
+                            <div className="flex items-center gap-3 p-4 bg-primary/10 rounded-lg border border-primary/20">
+                                <RefreshCw className="w-5 h-5 text-primary animate-spin" />
+                                <span className="text-text">Syncing data...</span>
                             </div>
                         )}
 
                         {/* Last Sync */}
                         {lastSyncTime && (
-                            <div className="flex items-center gap-3 p-4 bg-vintage-cream/50 rounded-vintage">
-                                <Clock className="w-5 h-5 text-vintage-black/60" />
+                            <div className="flex items-center gap-3 p-4 bg-surface-light rounded-lg border border-border">
+                                <Clock className="w-5 h-5 text-text-dim" />
                                 <div>
-                                    <p className="text-sm text-vintage-black/60">Last synced</p>
-                                    <p className="text-vintage-black font-medium">
+                                    <p className="text-sm text-text-dim">Last synced</p>
+                                    <p className="text-text font-medium">
                                         {formatDistanceToNow(lastSyncTime, { addSuffix: true })}
                                     </p>
                                 </div>
@@ -90,19 +93,19 @@ export default function ProfilePage() {
 
                         {/* Pending Changes */}
                         {pendingChanges > 0 && (
-                            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-vintage">
-                                <p className="text-sm text-yellow-800">
+                            <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                                <p className="text-sm text-yellow-400">
                                     <strong>{pendingChanges}</strong> change{pendingChanges > 1 ? 's' : ''} pending sync
                                 </p>
-                                <p className="text-xs text-yellow-600 mt-1">
-                                    Changes will sync automatically when you're online
+                                <p className="text-xs text-yellow-400/70 mt-1">
+                                    Changes will sync automatically when you&apos;re online
                                 </p>
                             </div>
                         )}
 
                         {!isSyncing && pendingChanges === 0 && isOnline && (
-                            <div className="p-4 bg-green-50 border border-green-200 rounded-vintage">
-                                <p className="text-sm text-green-800">
+                            <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                                <p className="text-sm text-green-400">
                                     ✓ All data is synced
                                 </p>
                             </div>
@@ -112,12 +115,12 @@ export default function ProfilePage() {
 
                 {/* App Info Card */}
                 <Card>
-                    <h3 className="text-xl font-semibold text-vintage-black mb-4">About</h3>
-                    <div className="space-y-2 text-sm text-vintage-black/70">
-                        <p><strong>App:</strong> SettleUp</p>
-                        <p><strong>Version:</strong> 1.0.0</p>
-                        <p><strong>Storage:</strong> IndexedDB (Offline-first)</p>
-                        <p><strong>Cloud Sync:</strong> Supabase</p>
+                    <h3 className="text-xl font-semibold text-text mb-4">About</h3>
+                    <div className="space-y-2 text-sm text-text-muted">
+                        <p><strong className="text-text">App:</strong> SettleUp</p>
+                        <p><strong className="text-text">Version:</strong> 1.0.0</p>
+                        <p><strong className="text-text">Storage:</strong> IndexedDB (Offline-first)</p>
+                        <p><strong className="text-text">Cloud Sync:</strong> Supabase</p>
                     </div>
                 </Card>
 
@@ -126,7 +129,7 @@ export default function ProfilePage() {
                     <Button
                         onClick={handleSignOut}
                         variant="outline"
-                        className="w-full flex items-center justify-center gap-3 text-red-600 hover:bg-red-50 border-red-200"
+                        className="w-full flex items-center justify-center gap-3 text-red-400 hover:bg-red-500/10 border-red-500/20"
                     >
                         <LogOut className="w-5 h-5" />
                         Sign Out

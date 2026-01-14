@@ -1,50 +1,43 @@
-import { useSyncStore } from '@/stores/syncStore';
-import { Wifi, WifiOff, RefreshCw } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+'use client';
 
-export function SyncStatusBadge() {
-    const { isOnline, isSyncing, lastSyncTime, pendingChanges } = useSyncStore();
+import { useSyncStore } from '@/stores/syncStore';
+import { CheckCircle2, RefreshCw, WifiOff, Cloud } from 'lucide-react';
+
+export default function SyncStatusBadge() {
+    const { isOnline, isSyncing, lastSyncTime } = useSyncStore();
+
+    if (!isOnline) {
+        return (
+            <div className="flex items-center gap-2 px-3 py-2 bg-surface-light border border-border rounded-lg">
+                <WifiOff className="w-4 h-4 text-text-dim" />
+                <span className="text-sm text-text-dim">Offline</span>
+            </div>
+        );
+    }
+
+    if (isSyncing) {
+        return (
+            <div className="flex items-center gap-2 px-3 py-2 bg-primary/10 border border-primary/20 rounded-lg">
+                <RefreshCw className="w-4 h-4 text-primary animate-spin" />
+                <span className="text-sm text-primary">Syncing...</span>
+            </div>
+        );
+    }
 
     return (
-        <div className="flex items-center gap-3">
-            {/* Online/Offline Indicator */}
-            <div className="flex items-center gap-2">
-                {isOnline ? (
-                    <>
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                        <Wifi className="w-4 h-4 text-green-600" />
-                    </>
-                ) : (
-                    <>
-                        <div className="w-2 h-2 bg-red-500 rounded-full" />
-                        <WifiOff className="w-4 h-4 text-red-600" />
-                    </>
+        <div className="flex items-center gap-2 px-3 py-2 bg-green-500/10 border border-green-500/20 rounded-lg">
+            <Cloud className="w-4 h-4 text-green-400" />
+            <div className="flex flex-col">
+                <span className="text-sm text-green-400 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" />
+                    Synced
+                </span>
+                {lastSyncTime && (
+                    <span className="text-xs text-text-dim">
+                        {new Date(lastSyncTime).toLocaleTimeString()}
+                    </span>
                 )}
             </div>
-
-            {/* Sync Status */}
-            {isSyncing && (
-                <div className="flex items-center gap-2 text-vintage-amber">
-                    <RefreshCw className="w-4 h-4 animate-spin" />
-                    <span className="text-sm">Syncing...</span>
-                </div>
-            )}
-
-            {/* Pending Changes */}
-            {pendingChanges > 0 && !isSyncing && (
-                <div className="flex items-center gap-2">
-                    <span className="text-sm text-vintage-amber">
-                        {pendingChanges} pending
-                    </span>
-                </div>
-            )}
-
-            {/* Last Sync Time */}
-            {lastSyncTime && !isSyncing && (
-                <span className="text-xs text-vintage-black/60">
-                    Last synced {formatDistanceToNow(lastSyncTime, { addSuffix: true })}
-                </span>
-            )}
         </div>
     );
 }

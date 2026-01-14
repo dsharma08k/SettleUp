@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth/AuthContext';
-import { Card } from '@/components/ui/Card';
+import Card from '@/components/ui/Card';
 import { db } from '@/lib/db';
 import { Wallet, TrendingUp, TrendingDown, Users } from 'lucide-react';
 
@@ -98,7 +98,7 @@ export default function DashboardPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
-                <div className="text-vintage-amber text-lg">Loading...</div>
+                <div className="text-primary text-lg">Loading...</div>
             </div>
         );
     }
@@ -106,10 +106,10 @@ export default function DashboardPage() {
     return (
         <div className="max-w-7xl mx-auto">
             <div className="mb-8">
-                <h1 className="text-4xl font-bold text-vintage-amber mb-2">
-                    Welcome Back, {user?.user_metadata?.name || 'Friend'}!
+                <h1 className="text-4xl font-bold text-text mb-2">
+                    Welcome Back, <span className="text-gradient">{user?.user_metadata?.name || 'Friend'}</span>!
                 </h1>
-                <p className="text-vintage-black/70">
+                <p className="text-text-muted">
                     Here's your expense overview
                 </p>
             </div>
@@ -117,61 +117,61 @@ export default function DashboardPage() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {/* Total Owed to You */}
-                <Card className="hover:shadow-vintage-lg transition-shadow">
+                <Card className="hover:shadow-lg hover:shadow-primary/10 transition-shadow">
                     <div className="flex items-start justify-between">
                         <div>
-                            <p className="text-sm text-vintage-black/60 mb-1">You're Owed</p>
-                            <p className="text-3xl font-bold text-green-600">
+                            <p className="text-sm text-text-dim mb-1">You're Owed</p>
+                            <p className="text-3xl font-bold text-green-400">
                                 {formatCurrency(stats.totalOwed)}
                             </p>
                         </div>
-                        <div className="p-3 bg-green-100 rounded-vintage">
-                            <TrendingUp className="w-6 h-6 text-green-600" />
+                        <div className="p-3 bg-green-500/10 rounded-lg">
+                            <TrendingUp className="w-6 h-6 text-green-400" />
                         </div>
                     </div>
                 </Card>
 
                 {/* Total You Owe */}
-                <Card className="hover:shadow-vintage-lg transition-shadow">
+                <Card className="hover:shadow-lg hover:shadow-primary/10 transition-shadow">
                     <div className="flex items-start justify-between">
                         <div>
-                            <p className="text-sm text-vintage-black/60 mb-1">You Owe</p>
-                            <p className="text-3xl font-bold text-red-600">
+                            <p className="text-sm text-text-dim mb-1">You Owe</p>
+                            <p className="text-3xl font-bold text-red-400">
                                 {formatCurrency(stats.totalOwing)}
                             </p>
                         </div>
-                        <div className="p-3 bg-red-100 rounded-vintage">
-                            <TrendingDown className="w-6 h-6 text-red-600" />
+                        <div className="p-3 bg-red-500/10 rounded-lg">
+                            <TrendingDown className="w-6 h-6 text-red-400" />
                         </div>
                     </div>
                 </Card>
 
                 {/* Total Groups */}
-                <Card className="hover:shadow-vintage-lg transition-shadow">
+                <Card className="hover:shadow-lg hover:shadow-primary/10 transition-shadow">
                     <div className="flex items-start justify-between">
                         <div>
-                            <p className="text-sm text-vintage-black/60 mb-1">Groups</p>
-                            <p className="text-3xl font-bold text-vintage-amber">
+                            <p className="text-sm text-text-dim mb-1">Groups</p>
+                            <p className="text-3xl font-bold text-primary">
                                 {stats.groupsCount}
                             </p>
                         </div>
-                        <div className="p-3 bg-vintage-amber/20 rounded-vintage">
-                            <Users className="w-6 h-6 text-vintage-amber" />
+                        <div className="p-3 bg-primary/10 rounded-lg">
+                            <Users className="w-6 h-6 text-primary" />
                         </div>
                     </div>
                 </Card>
 
                 {/* Total Expenses */}
-                <Card className="hover:shadow-vintage-lg transition-shadow">
+                <Card className="hover:shadow-lg hover:shadow-primary/10 transition-shadow">
                     <div className="flex items-start justify-between">
                         <div>
-                            <p className="text-sm text-vintage-black/60 mb-1">Expenses</p>
-                            <p className="text-3xl font-bold text-vintage-black">
+                            <p className="text-sm text-text-dim mb-1">Expenses</p>
+                            <p className="text-3xl font-bold text-text">
                                 {stats.recentExpensesCount}
                             </p>
                         </div>
-                        <div className="p-3 bg-vintage-cream rounded-vintage border border-vintage-amber/20">
-                            <Wallet className="w-6 h-6 text-vintage-black" />
+                        <div className="p-3 bg-surface-light rounded-lg border border-border">
+                            <Wallet className="w-6 h-6 text-text" />
                         </div>
                     </div>
                 </Card>
@@ -180,10 +180,10 @@ export default function DashboardPage() {
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card>
-                    <h3 className="text-xl font-semibold text-vintage-black mb-4">
+                    <h3 className="text-xl font-semibold text-text mb-4">
                         Recent Activity
                     </h3>
-                    <p className="text-vintage-black/60">
+                    <p className="text-text-muted">
                         {stats.recentExpensesCount > 0
                             ? 'Your recent expenses will appear here'
                             : 'No expenses yet. Create a group to get started!'}
@@ -191,19 +191,19 @@ export default function DashboardPage() {
                 </Card>
 
                 <Card>
-                    <h3 className="text-xl font-semibold text-vintage-black mb-4">
+                    <h3 className="text-xl font-semibold text-text mb-4">
                         Quick Actions
                     </h3>
                     <div className="space-y-3">
                         <a
                             href="/dashboard/groups"
-                            className="block px-4 py-3 bg-vintage-amber hover:bg-vintage-amber-dark text-white rounded-vintage transition-colors text-center font-medium"
+                            className="block px-4 py-3 bg-primary hover:bg-primary-dark text-background rounded-lg transition-colors text-center font-medium shadow-lg shadow-primary/20"
                         >
                             View Groups
                         </a>
                         <a
                             href="/dashboard/groups/new"
-                            className="block px-4 py-3 bg-vintage-cream hover:bg-vintage-amber-light border border-vintage-amber text-vintage-black rounded-vintage transition-colors text-center font-medium"
+                            className="block px-4 py-3 bg-surface hover:bg-surface-light border border-border text-text rounded-lg transition-colors text-center font-medium"
                         >
                             Create New Group
                         </a>
