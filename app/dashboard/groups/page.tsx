@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth/AuthContext';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { getGroupsByUser, createGroup, joinGroupByCode } from '@/lib/db/operations';
+import { getGroups, createGroup, joinGroup } from '@/lib/db/operations';
 import { Group } from '@/lib/db';
 import { Users, Plus, UserPlus, Copy, Check, LogIn, QrCode } from 'lucide-react';
 import Link from 'next/link';
