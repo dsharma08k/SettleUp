@@ -91,18 +91,18 @@ export async function joinGroup(
     // 2. If not found locally, check Supabase (global search)
     if (!group) {
       console.log('Group not found locally, checking Supabase...');
-      const { data, error } = await supabase
-        .from('groups')
-        .select('*')
-        .eq('invite_code', inviteCode)
-        .single();
+      // Use RPC to bypass RLS policies for invite code lookup
+      const { data, error } = await supabase.rpc('get_group_by_invite_code', {
+        code: inviteCode
+      });
 
-      if (error || !data) {
+      if (error || !data || data.length === 0) {
         return { success: false, error: 'Invalid invite code' };
       }
 
       // Found in Supabase, add to local DB
-      group = data as Group;
+      // RPC returns an array, so take the first item
+      group = data[0] as Group;
       await db.groups.put(group);
 
       // Also fetch and cache existing members to prevent duplicate joining

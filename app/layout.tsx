@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth/AuthContext";
 import { Toaster } from "react-hot-toast";
@@ -57,13 +57,14 @@ export const metadata: Metadata = {
         ],
     },
     manifest: '/manifest.json',
+};
+
+export const viewport: Viewport = {
     themeColor: '#d4a574',
-    viewport: {
-        width: 'device-width',
-        initialScale: 1,
-        maximumScale: 1,
-        userScalable: false,
-    },
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
 };
 
 export default function RootLayout({

@@ -2,9 +2,17 @@
 
 import { useSyncStore } from '@/stores/syncStore';
 import { CheckCircle2, RefreshCw, WifiOff, Cloud } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function SyncStatusBadge() {
+    const [mounted, setMounted] = useState(false);
     const { isOnline, isSyncing, lastSyncTime } = useSyncStore();
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null;
 
     if (!isOnline) {
         return (
