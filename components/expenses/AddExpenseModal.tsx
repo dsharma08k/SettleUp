@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Card } from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Card from '@/components/ui/Card';
 import { GroupMember } from '@/lib/db';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -185,8 +185,8 @@ export function AddExpenseModal({
                                 type="button"
                                 onClick={() => setSplitType('equal')}
                                 className={`flex-1 px-4 py-3 rounded-vintage border transition-colors ${splitType === 'equal'
-                                        ? 'bg-vintage-amber text-white border-vintage-amber'
-                                        : 'bg-white text-vintage-black border-vintage-amber/30 hover:border-vintage-amber'
+                                    ? 'bg-vintage-amber text-white border-vintage-amber'
+                                    : 'bg-white text-vintage-black border-vintage-amber/30 hover:border-vintage-amber'
                                     }`}
                             >
                                 Equal Split
@@ -195,8 +195,8 @@ export function AddExpenseModal({
                                 type="button"
                                 onClick={() => setSplitType('custom')}
                                 className={`flex-1 px-4 py-3 rounded-vintage border transition-colors ${splitType === 'custom'
-                                        ? 'bg-vintage-amber text-white border-vintage-amber'
-                                        : 'bg-white text-vintage-black border-vintage-amber/30 hover:border-vintage-amber'
+                                    ? 'bg-vintage-amber text-white border-vintage-amber'
+                                    : 'bg-white text-vintage-black border-vintage-amber/30 hover:border-vintage-amber'
                                     }`}
                             >
                                 Custom Split
