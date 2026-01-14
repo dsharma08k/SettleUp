@@ -34,15 +34,15 @@ export function useRealtimeSubscriptions() {
                     if ((payload.new as any)?.created_by === user.id) return;
 
                     if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
-                        const existing = await db.groups.get(payload.new.id);
+                        const existing = await db.groups.get((payload.new as any).id);
                         // Only update if remote is newer or doesn't exist
-                        if (!existing || new Date(payload.new.last_modified_at) > new Date(existing.last_modified_at)) {
-                            await db.groups.put(payload.new);
-                            toast(`📥 Group "${payload.new.name}" updated`, { icon: '🔄' });
+                        if (!existing || new Date((payload.new as any).last_modified_at) > new Date(existing.last_modified_at)) {
+                            await db.groups.put(payload.new as any);
+                            toast(`📥 Group "${(payload.new as any).name}" updated`, { icon: '🔄' });
                         }
                     } else if (payload.eventType === 'DELETE') {
-                        await db.groups.delete(payload.old.id);
-                        toast(`Group "${payload.old.name}" was deleted`, { icon: '🗑️' });
+                        await db.groups.delete((payload.old as any).id);
+                        toast(`Group "${(payload.old as any).name}" was deleted`, { icon: '🗑️' });
                     }
                 }
             )
@@ -62,22 +62,22 @@ export function useRealtimeSubscriptions() {
                 },
                 async (payload) => {
                     if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
-                        const existing = await db.group_members.get(payload.new.id);
-                        if (!existing || new Date(payload.new.last_modified_at) > new Date(existing.last_modified_at)) {
-                            await db.group_members.put(payload.new);
+                        const existing = await db.group_members.get((payload.new as any).id);
+                        if (!existing || new Date((payload.new as any).last_modified_at) > new Date(existing.last_modified_at)) {
+                            await db.group_members.put(payload.new as any);
 
                             // Only show toast if this affects current user's groups
                             const isMember = await db.group_members
                                 .where(['group_id', 'user_id'])
-                                .equals([payload.new.group_id, user.id])
+                                .equals([(payload.new as any).group_id, user.id])
                                 .first();
 
-                            if (isMember && payload.new.user_id !== user.id) {
-                                toast(`📥 ${payload.new.name} joined a group`, { icon: '👤' });
+                            if (isMember && (payload.new as any).user_id !== user.id) {
+                                toast(`📥 ${(payload.new as any).name} joined a group`, { icon: '👤' });
                             }
                         }
                     } else if (payload.eventType === 'DELETE') {
-                        await db.group_members.delete(payload.old.id);
+                        await db.group_members.delete((payload.old as any).id);
                     }
                 }
             )
@@ -96,19 +96,19 @@ export function useRealtimeSubscriptions() {
                     table: 'expenses',
                 },
                 async (payload) => {
-                    if (payload.new?.created_by === user.id) return; // Skip own changes
+                    if ((payload.new as any)?.created_by === user.id) return; // Skip own changes
 
                     if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
-                        const existing = await db.expenses.get(payload.new.id);
-                        if (!existing || new Date(payload.new.last_modified_at) > new Date(existing.last_modified_at)) {
-                            await db.expenses.put(payload.new);
+                        const existing = await db.expenses.get((payload.new as any).id);
+                        if (!existing || new Date((payload.new as any).last_modified_at) > new Date(existing.last_modified_at)) {
+                            await db.expenses.put(payload.new as any);
 
                             if (payload.eventType === 'INSERT') {
-                                toast(`📥 New expense: ${payload.new.title}`, { icon: '💰', duration: 4000 });
+                                toast(`📥 New expense: ${(payload.new as any).title}`, { icon: '💰', duration: 4000 });
                             }
                         }
                     } else if (payload.eventType === 'DELETE') {
-                        await db.expenses.delete(payload.old.id);
+                        await db.expenses.delete((payload.old as any).id);
                     }
                 }
             )
@@ -128,12 +128,12 @@ export function useRealtimeSubscriptions() {
                 },
                 async (payload) => {
                     if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
-                        const existing = await db.expense_splits.get(payload.new.id);
-                        if (!existing || new Date(payload.new.last_modified_at) > new Date(existing.last_modified_at)) {
-                            await db.expense_splits.put(payload.new);
+                        const existing = await db.expense_splits.get((payload.new as any).id);
+                        if (!existing || new Date((payload.new as any).last_modified_at) > new Date(existing.last_modified_at)) {
+                            await db.expense_splits.put(payload.new as any);
                         }
                     } else if (payload.eventType === 'DELETE') {
-                        await db.expense_splits.delete(payload.old.id);
+                        await db.expense_splits.delete((payload.old as any).id);
                     }
                 }
             )
