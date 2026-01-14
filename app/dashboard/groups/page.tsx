@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { getGroupsByUser, createGroup, joinGroupByCode } from '@/lib/db/operations';
 import { Group } from '@/lib/db';
-import { Users, Plus, UserPlus, Copy, Check } from 'lucide-react';
+import { Users, Plus, UserPlus, Copy, Check, LogIn, QrCode } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import Input from '@/components/ui/Input';
