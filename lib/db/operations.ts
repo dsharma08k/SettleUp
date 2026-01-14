@@ -1,5 +1,6 @@
 import { db, Group, GroupMember, Expense, ExpenseSplit } from './index';
 import { v4 as uuidv4 } from 'uuid';
+import { supabase } from '@/lib/supabase/client';
 
 // Generate a random 6-character invite code
 function generateInviteCode(): string {
@@ -84,18 +85,48 @@ export async function joinGroup(
   inviteCode: string
 ): Promise<{ success: boolean; error?: string; group?: Group }> {
   try {
-    const group = await db.groups.where('invite_code').equals(inviteCode).first();
+    // 1. Try to find group locally
+    let group = await db.groups.where('invite_code').equals(inviteCode).first();
+
+    // 2. If not found locally, check Supabase (global search)
+    if (!group) {
+      console.log('Group not found locally, checking Supabase...');
+      const { data, error } = await supabase
+        .from('groups')
+        .select('*')
+        .eq('invite_code', inviteCode)
+        .single();
+
+      if (error || !data) {
+        return { success: false, error: 'Invalid invite code' };
+      }
+
+      // Found in Supabase, add to local DB
+      group = data as Group;
+      await db.groups.put(group);
+
+      // Also fetch and cache existing members to prevent duplicate joining
+      const { data: members } = await supabase
+        .from('group_members')
+        .select('*')
+        .eq('group_id', group.id);
+
+      if (members) {
+        await db.group_members.bulkPut(members as GroupMember[]);
+      }
+    }
 
     if (!group) {
       return { success: false, error: 'Invalid invite code' };
     }
 
-    const existing = await db.group_members
+    // 3. Check if already a member (locally)
+    const existingLocal = await db.group_members
       .where(['group_id', 'user_id'])
       .equals([group.id, userId])
       .first();
 
-    if (existing) {
+    if (existingLocal) {
       return { success: false, error: 'Already a member of this group' };
     }
 
