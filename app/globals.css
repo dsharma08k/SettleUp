@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  body {
+    @apply bg-vintage-cream text-vintage-black font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer utilities {
+  .paper-texture {
+    background-image: 
+      linear-gradient(
+        to bottom,
+        rgba(212, 165, 116, 0.05) 0%,
+        rgba(212, 165, 116, 0.02) 100%
+      );
+  }
+  
+  .glass-vintage {
+    background: rgba(245, 235, 224, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 165, 116, 0.2);
+  }
+}
