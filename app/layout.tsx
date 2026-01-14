@@ -57,12 +57,12 @@ export const metadata: Metadata = {
         ],
     },
     manifest: '/manifest.json',
+    themeColor: '#d4a574',
     viewport: {
         width: 'device-width',
         initialScale: 1,
         maximumScale: 1,
         userScalable: false,
-        themeColor: '#d4a574',
     },
 };
 
