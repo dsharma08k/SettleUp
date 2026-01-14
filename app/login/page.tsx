@@ -24,6 +24,8 @@ export default function LoginPage() {
         setErrors({});
         setLoading(true);
 
+        console.log('🔵 Login attempt started...');
+
         // Basic validation
         const newErrors: { email?: string; password?: string } = {};
         if (!formData.email) newErrors.email = 'Email is required';
@@ -35,79 +37,74 @@ export default function LoginPage() {
             return;
         }
 
-        const { error } = await signIn(formData.email, formData.password);
-
-        if (error) {
-            toast.error(error.message || 'Failed to sign in');
-            setLoading(false);
-        } else {
-            toast.success('Welcome back!');
-            router.push('/dashboard');
-        }
+    } else {
+        toast.success('Welcome back!');
+    router.push('/dashboard');
+}
     };
 
-    return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="w-full max-w-md">
-                <div className="text-center mb-8">
-                    <h1 className="text-5xl font-bold text-gradient mb-3">
-                        SettleUp
-                    </h1>
-                    <p className="text-text-muted text-lg">
-                        Welcome back! Sign in to continue.
+return (
+    <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+            <div className="text-center mb-8">
+                <h1 className="text-5xl font-bold text-gradient mb-3">
+                    SettleUp
+                </h1>
+                <p className="text-text-muted text-lg">
+                    Welcome back! Sign in to continue.
+                </p>
+            </div>
+
+            <Card>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    <Input
+                        type="email"
+                        label="Email"
+                        placeholder="you@example.com"
+                        value={formData.email}
+                        onChange={(e) =>
+                            setFormData({ ...formData, email: e.target.value })
+                        }
+                        error={errors.email}
+                        autoComplete="email"
+                    />
+
+                    <Input
+                        type="password"
+                        label="Password"
+                        placeholder="••••••••"
+                        value={formData.password}
+                        onChange={(e) =>
+                            setFormData({ ...formData, password: e.target.value })
+                        }
+                        error={errors.password}
+                        autoComplete="current-password"
+                    />
+
+                    <Button
+                        type="submit"
+                        variant="primary"
+                        size="lg"
+                        className="w-full"
+                        disabled={loading}
+                    >
+                        {loading ? 'Signing in...' : 'Sign In'}
+                    </Button>
+                </form>
+
+                <div className="mt-6 text-center">
+                    <p className="text-sm text-text-muted">
+                        Don't have an account?{' '}
+                        <Link
+                            href="/signup"
+                            className="text-primary hover:text-primary-light font-medium"
+                        >
+                            Sign up
+                        </Link>
                     </p>
                 </div>
-
-                <Card>
-                    <form onSubmit={handleSubmit} className="space-y-5">
-                        <Input
-                            type="email"
-                            label="Email"
-                            placeholder="you@example.com"
-                            value={formData.email}
-                            onChange={(e) =>
-                                setFormData({ ...formData, email: e.target.value })
-                            }
-                            error={errors.email}
-                            autoComplete="email"
-                        />
-
-                        <Input
-                            type="password"
-                            label="Password"
-                            placeholder="••••••••"
-                            value={formData.password}
-                            onChange={(e) =>
-                                setFormData({ ...formData, password: e.target.value })
-                            }
-                            error={errors.password}
-                            autoComplete="current-password"
-                        />
-
-                        <Button
-                            type="submit"
-                            variant="primary"
-                            size="lg"
-                            className="w-full"
-                            disabled={loading}
-                        >
-                            {loading ? 'Signing in...' : 'Sign In'}
-                        </Button>
-                    </form>
-
-                    <div className="mt-6 text-center">
-                        <p className="text-sm text-text-muted">
-                            Don't have an account?{' '}
-                            <Link
-                                href="/signup"
-                                className="text-primary hover:text-primary-light font-medium"
-                            >
-                                Sign up
-                            </Link>
-                        </p>
-                    </div>
-                </Card>
-            </div>
+            </Card>
         </div>
-    );
+    </div>
+);
 }
