@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth/AuthContext';
-import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
-import { getGroups, createGroup, joinGroup } from '@/lib/db/operations';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import { getGroupsByUser, createGroup, joinGroupByCode } from '@/lib/db/operations';
 import { Group } from '@/lib/db';
-import { Users, Plus, LogIn, QrCode } from 'lucide-react';
+import { Users, Plus, UserPlus, Copy, Check } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Input } from '@/components/ui/Input';
+import Input from '@/components/ui/Input';
 
 export default function GroupsPage() {
     const { user } = useAuth();

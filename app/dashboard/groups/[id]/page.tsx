@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/AuthContext';
-import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
 import { getGroup, getGroupMembers, createExpense, getGroupExpenses, getExpenseSplits, deleteExpense } from '@/lib/db/operations';
 import { Group, GroupMember, Expense, ExpenseSplit } from '@/lib/db';
 import { Users, Copy, Check, ArrowLeft, Plus, Trash2, Calendar } from 'lucide-react';
