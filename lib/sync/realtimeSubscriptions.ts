@@ -31,7 +31,7 @@ export function useRealtimeSubscriptions() {
                 },
                 async (payload) => {
                     // Skip if this change originated from current user
-                    if (payload.new?.created_by === user.id) return;
+                    if ((payload.new as any)?.created_by === user.id) return;
 
                     if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
                         const existing = await db.groups.get(payload.new.id);
