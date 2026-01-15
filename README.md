@@ -36,7 +36,16 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 Create a `.env.local` file:
 
-```
+## Troubleshooting
+
+### "Bucket not found" Error
+If you see this error, you need to create the storage bucket manually in Supabase Dashboard:
+1. Go to **Storage** > **New Bucket** > Name it `avatars` > Make it **Public**.
+2. Or run the SQL provided in `supabase/migrations/20240115_add_avatar_storage.sql`.
+
+### "App pauses / Keeps logging out"
+If you are on the **Supabase Free Tier**, the database pauses after inactivity, which causes login sessions to fail.
+**Solution:** Use a free uptime monitor (like [Cron-job.org](https://cron-job.org) or [UptimeRobot](https://uptimerobot.com)) to ping your API URL `https://your-project.supabase.co/rest/v1/` or your site every 10-15 minutes to keep it awake.
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 ```

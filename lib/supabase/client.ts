@@ -54,6 +54,7 @@ export interface Database {
                     user_id: string;
                     name: string;
                     role: 'admin' | 'member';
+                    avatar_url: string | null;
                     joined_at: string;
                     last_modified_at: string;
                 };
@@ -63,6 +64,7 @@ export interface Database {
                     user_id: string;
                     name: string;
                     role?: 'admin' | 'member';
+                    avatar_url?: string | null;
                     joined_at?: string;
                     last_modified_at?: string;
                 };
@@ -72,6 +74,7 @@ export interface Database {
                     user_id?: string;
                     name?: string;
                     role?: 'admin' | 'member';
+                    avatar_url?: string | null;
                     joined_at?: string;
                     last_modified_at?: string;
                 };

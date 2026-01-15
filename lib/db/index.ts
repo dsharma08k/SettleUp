@@ -18,6 +18,7 @@ export interface GroupMember {
     user_id: string;
     name: string;
     role: 'admin' | 'member';
+    avatar_url?: string | null;
     joined_at: string;
     last_modified_at: string;
 }
@@ -83,7 +84,7 @@ export class SettleUpDatabase extends Dexie {
     constructor() {
         super('SettleUpDB');
 
-        this.version(2).stores({
+        this.version(3).stores({
             groups: 'id, created_by, invite_code, last_modified_at',
             group_members: 'id, group_id, user_id, [group_id+user_id], last_modified_at',
             expenses: 'id, group_id, created_by, date, last_modified_at',
