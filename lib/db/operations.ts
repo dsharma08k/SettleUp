@@ -161,7 +161,7 @@ export async function deleteGroup(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     // 1. Delete all related data locally
-    await db.transaction('rw', db.groups, db.group_members, db.expenses, db.expense_splits, db.settlements, db.sync_queue, async () => {
+    await db.transaction('rw', [db.groups, db.group_members, db.expenses, db.expense_splits, db.settlements, db.sync_queue], async () => {
       await db.group_members.where('group_id').equals(groupId).delete();
       await db.expenses.where('group_id').equals(groupId).delete();
       await db.settlements.where('group_id').equals(groupId).delete();
