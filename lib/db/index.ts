@@ -83,9 +83,9 @@ export class SettleUpDatabase extends Dexie {
     constructor() {
         super('SettleUpDB');
 
-        this.version(1).stores({
+        this.version(2).stores({
             groups: 'id, created_by, invite_code, last_modified_at',
-            group_members: 'id, group_id, user_id, last_modified_at',
+            group_members: 'id, group_id, user_id, [group_id+user_id], last_modified_at',
             expenses: 'id, group_id, created_by, date, last_modified_at',
             expense_splits: 'id, expense_id, user_id, last_modified_at',
             settlements: 'id, group_id, from_user, to_user, last_modified_at',

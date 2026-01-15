@@ -111,7 +111,7 @@ export function AddExpenseModal({
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
             <Card className="w-full max-w-2xl my-8">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-vintage-amber">Add Expense</h2>
+                    <h2 className="text-2xl font-bold text-primary">Add Expense</h2>
                     <button
                         onClick={onClose}
                         className="p-2 hover:bg-vintage-amber/10 rounded-vintage transition-colors"
@@ -140,13 +140,13 @@ export function AddExpenseModal({
                         />
 
                         <div>
-                            <label className="block text-sm font-medium text-vintage-black mb-1.5">
+                            <label className="block text-sm font-medium text-text mb-1.5">
                                 Category (Optional)
                             </label>
                             <select
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
-                                className="w-full px-4 py-2.5 rounded-vintage bg-white border border-vintage-amber/30 text-vintage-black focus:outline-none focus:ring-2 focus:ring-vintage-amber focus:border-transparent transition-all duration-200"
+                                className="w-full px-4 py-2.5 rounded-vintage bg-surface border border-border text-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
                             >
                                 <option value="">Select category</option>
                                 <option value="Food">Food</option>
@@ -160,13 +160,13 @@ export function AddExpenseModal({
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-vintage-black mb-1.5">
+                        <label className="block text-sm font-medium text-text mb-1.5">
                             Paid By
                         </label>
                         <select
                             value={paidBy}
                             onChange={(e) => setPaidBy(e.target.value)}
-                            className="w-full px-4 py-2.5 rounded-vintage bg-white border border-vintage-amber/30 text-vintage-black focus:outline-none focus:ring-2 focus:ring-vintage-amber focus:border-transparent transition-all duration-200"
+                            className="w-full px-4 py-2.5 rounded-vintage bg-surface border border-border text-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
                         >
                             {members.map((member) => (
                                 <option key={member.user_id} value={member.user_id}>
@@ -177,7 +177,7 @@ export function AddExpenseModal({
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-vintage-black mb-3">
+                        <label className="block text-sm font-medium text-text mb-3">
                             Split Method
                         </label>
                         <div className="flex gap-3">
@@ -185,8 +185,8 @@ export function AddExpenseModal({
                                 type="button"
                                 onClick={() => setSplitType('equal')}
                                 className={`flex-1 px-4 py-3 rounded-vintage border transition-colors ${splitType === 'equal'
-                                    ? 'bg-vintage-amber text-white border-vintage-amber'
-                                    : 'bg-white text-vintage-black border-vintage-amber/30 hover:border-vintage-amber'
+                                    ? 'bg-primary text-background border-primary'
+                                    : 'bg-surface text-text border-border hover:border-primary'
                                     }`}
                             >
                                 Equal Split
@@ -195,8 +195,8 @@ export function AddExpenseModal({
                                 type="button"
                                 onClick={() => setSplitType('custom')}
                                 className={`flex-1 px-4 py-3 rounded-vintage border transition-colors ${splitType === 'custom'
-                                    ? 'bg-vintage-amber text-white border-vintage-amber'
-                                    : 'bg-white text-vintage-black border-vintage-amber/30 hover:border-vintage-amber'
+                                    ? 'bg-primary text-background border-primary'
+                                    : 'bg-surface text-text border-border hover:border-primary'
                                     }`}
                             >
                                 Custom Split
@@ -205,8 +205,8 @@ export function AddExpenseModal({
                     </div>
 
                     {/* Split Preview */}
-                    <div className="bg-vintage-cream/50 rounded-vintage p-4 border border-vintage-amber/20">
-                        <h4 className="font-semibold text-vintage-black mb-3">Split Preview</h4>
+                    <div className="bg-surface-light rounded-vintage p-4 border border-border">
+                        <h4 className="font-semibold text-text mb-3">Split Preview</h4>
                         <div className="space-y-2">
                             {splitType === 'equal' ? (
                                 members.map((member, index) => {

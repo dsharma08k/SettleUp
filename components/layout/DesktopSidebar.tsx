@@ -8,7 +8,7 @@ import SyncStatusBadge from './SyncStatusBadge';
 
 export default function DesktopSidebar() {
     const pathname = usePathname();
-    const { signOut } = useAuth();
+    const { signOut, user } = useAuth();
 
     const navItems = [
         { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -44,7 +44,21 @@ export default function DesktopSidebar() {
                                 }
                             `}
                         >
-                            <Icon className="w-5 h-5" />
+                            {/* Show avatar for Profile link if available, otherwise show Icon */}
+                            {item.label === 'Profile' && user?.user_metadata?.avatar_url ? (
+                                <div className="relative w-5 h-5 rounded-full overflow-hidden border border-current">
+                                    {/* Using standard img for external blob URL to handle potential Next.js image domain issues quickly 
+                                        In production, we should configure next.config.js for the Supabase domain 
+                                    */}
+                                    <img
+                                        src={user.user_metadata.avatar_url}
+                                        alt="Profile"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            ) : (
+                                <Icon className="w-5 h-5" />
+                            )}
                             <span className="font-medium">{item.label}</span>
                         </Link>
                     );

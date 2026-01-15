@@ -48,7 +48,7 @@ export async function pushToSupabase(userId: string): Promise<{ success: boolean
                         if (!upsertError) {
                             success = true;
                         } else {
-                            console.error(`Error upserting to ${tableName}:`, upsertError);
+                            console.error(`Error upserting to ${tableName}:`, JSON.stringify(upsertError, null, 2));
                             errorCount++;
                         }
                         break;

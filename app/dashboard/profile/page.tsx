@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth/AuthContext';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
+import AvatarUpload from '@/components/ui/AvatarUpload';
+import { supabase } from '@/lib/supabase/client';
 import { useSyncStore } from '@/stores/syncStore';
 import { User, LogOut, Wifi, WifiOff, RefreshCw, Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -14,6 +16,16 @@ export default function ProfilePage() {
     const { user, signOut } = useAuth();
     const router = useRouter();
     const { isOnline, isSyncing, lastSyncTime, pendingChanges } = useSyncStore();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Prevent hydration mismatch for online status
+    if (!mounted) {
+        return null; // or a loading skeleton
+    }
 
     const handleSignOut = async () => {
         await signOut();
@@ -32,14 +44,26 @@ export default function ProfilePage() {
                 {/* User Info Card */}
                 <Card>
                     <div className="flex items-start gap-6">
-                        <div className="p-4 bg-primary/10 rounded-lg">
-                            <User className="w-12 h-12 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                            <h2 className="text-2xl font-semibold text-text mb-2">
+                        <AvatarUpload
+                            uid={user?.id || ''}
+                            url={user?.user_metadata?.avatar_url || null}
+                            onUpload={async (url) => {
+                                const { error } = await supabase.auth.updateUser({
+                                    data: { avatar_url: url },
+                                });
+                                if (error) {
+                                    toast.error('Failed to update profile');
+                                } else {
+                                    // Force reload to update UI across app
+                                    window.location.reload();
+                                }
+                            }}
+                        />
+                        <div className="flex-1 min-w-0 pt-2">
+                            <h2 className="text-2xl font-semibold text-text mb-1 truncate">
                                 {user?.user_metadata?.name || 'User'}
                             </h2>
-                            <p className="text-text-muted">{user?.email}</p>
+                            <p className="text-text-muted truncate">{user?.email}</p>
                             <p className="text-sm text-text-dim mt-2">
                                 Member since {user?.created_at && formatDistanceToNow(new Date(user.created_at), { addSuffix: true })}
                             </p>

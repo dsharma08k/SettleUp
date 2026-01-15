@@ -4,8 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Users, User } from 'lucide-react';
 
+import { useAuth } from '@/lib/auth/AuthContext';
+
 export default function MobileNav() {
     const pathname = usePathname();
+    const { user } = useAuth();
 
     const navItems = [
         { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -32,7 +35,17 @@ export default function MobileNav() {
                                 }
                             `}
                         >
-                            <Icon className="w-5 h-5" />
+                            {item.label === 'Profile' && user?.user_metadata?.avatar_url ? (
+                                <div className="relative w-5 h-5 rounded-full overflow-hidden border border-current">
+                                    <img
+                                        src={user.user_metadata.avatar_url}
+                                        alt="Profile"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            ) : (
+                                <Icon className="w-5 h-5" />
+                            )}
                             <span className="text-xs font-medium">{item.label}</span>
                         </Link>
                     );

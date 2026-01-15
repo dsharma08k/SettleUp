@@ -92,12 +92,15 @@ export async function joinGroup(
     if (!group) {
       console.log('Group not found locally, checking Supabase...');
       // Use RPC to bypass RLS policies for invite code lookup
+      console.log('Calling RPC get_group_by_invite_code with:', inviteCode);
       const { data, error } = await supabase.rpc('get_group_by_invite_code', {
         code: inviteCode
       });
+      console.log('RPC Response:', { data, error });
 
       if (error || !data || data.length === 0) {
-        return { success: false, error: 'Invalid invite code' };
+        console.log('RPC returned no data or error');
+        return { success: false, error: 'Invalid invite code or group not synced' };
       }
 
       // Found in Supabase, add to local DB

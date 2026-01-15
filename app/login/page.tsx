@@ -24,7 +24,7 @@ export default function LoginPage() {
         setErrors({});
         setLoading(true);
 
-        console.log('🔵 Login attempt started...');
+
 
         // Basic validation
         const newErrors: { email?: string; password?: string } = {};

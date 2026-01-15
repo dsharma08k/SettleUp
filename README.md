@@ -25,9 +25,12 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - ✅ Offline-first architecture with IndexedDB
 - ✅ Cloud sync with Supabase
 - ✅ Real-time updates across devices
-- ✅ Expense tracking and splitting
+- ✅ Expense tracking and splitting (Equal/Custom)
 - ✅ Smart settlement calculations
-- ✅ PWA support
+- ✅ Group Invite Codes
+- ✅ Profile Picture Upload (Storage)
+- ✅ Dark Mode UI
+- ✅ PWA support (Installable)
 
 ## Environment Variables
 

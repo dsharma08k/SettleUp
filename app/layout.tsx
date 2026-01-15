@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth/AuthContext";
+import SyncManager from "@/components/sync/SyncManager";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
@@ -76,6 +77,7 @@ export default function RootLayout({
         <html lang="en">
             <body className="antialiased">
                 <AuthProvider>
+                    <SyncManager />
                     {children}
                     <Toaster
                         position="top-right"
