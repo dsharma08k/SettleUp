@@ -154,6 +154,52 @@ export async function joinGroup(
   }
 }
 
+// Delete Group Operation
+export async function deleteGroup(
+  userId: string,
+  groupId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    // 1. Delete all related data locally
+    await db.transaction('rw', db.groups, db.group_members, db.expenses, db.expense_splits, db.settlements, db.sync_queue, async () => {
+      await db.group_members.where('group_id').equals(groupId).delete();
+      await db.expenses.where('group_id').equals(groupId).delete();
+      await db.settlements.where('group_id').equals(groupId).delete();
+      await db.groups.delete(groupId);
+
+      // Add to sync queue
+      await addToSyncQueue(userId, 'groups', 'delete', groupId, { id: groupId });
+    });
+
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error deleting group:', error);
+    return { success: false, error: error.message || 'Failed to delete group' };
+  }
+}
+
+// Remove Member Operation
+export async function removeMember(
+  userId: string,
+  groupId: string,
+  memberId: string,
+  targetUserId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await db.group_members.delete(memberId);
+
+    // Add to sync queue
+    // usage of targetUserId ensures we identify which user is removed if needed,
+    // but the ID is the primary key for the delete operation.
+    await addToSyncQueue(userId, 'group_members', 'delete', memberId, { id: memberId });
+
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error removing member:', error);
+    return { success: false, error: error.message || 'Failed to remove member' };
+  }
+}
+
 export async function getGroupMembers(groupId: string): Promise<GroupMember[]> {
   try {
     return await db.group_members.where('group_id').equals(groupId).toArray();

@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/AuthContext';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { getGroup, getGroupMembers, createExpense, getGroupExpenses, getExpenseSplits, deleteExpense } from '@/lib/db/operations';
+import { getGroup, getGroupMembers, createExpense, getGroupExpenses, getExpenseSplits, deleteExpense, deleteGroup, removeMember } from '@/lib/db/operations';
 import { Group, GroupMember, Expense, ExpenseSplit } from '@/lib/db';
 import { Users, Copy, Check, ArrowLeft, Plus, Trash2, Calendar } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
@@ -104,6 +104,40 @@ export default function GroupDetailPage() {
         }
     };
 
+    const handleDeleteGroup = async () => {
+        if (!user || !group) return;
+
+        if (!confirm('Are you sure you want to delete this group? This action cannot be undone and will delete all expenses and settlements.')) {
+            return;
+        }
+
+        const { success, error } = await deleteGroup(user.id, group.id);
+
+        if (success) {
+            toast.success('Group deleted successfully');
+            router.push('/dashboard/groups');
+        } else {
+            toast.error(error || 'Failed to delete group');
+        }
+    };
+
+    const handleRemoveMember = async (memberId: string, memberName: string, userIdToRemove: string) => {
+        if (!user || !group) return;
+
+        if (!confirm(`Are you sure you want to remove ${memberName} from the group?`)) {
+            return;
+        }
+
+        const { success, error } = await removeMember(user.id, group.id, memberId, userIdToRemove);
+
+        if (success) {
+            toast.success('Member removed');
+            setMembers(members.filter((m) => m.id !== memberId));
+        } else {
+            toast.error(error || 'Failed to remove member');
+        }
+    };
+
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-IN', {
             style: 'currency',
@@ -157,10 +191,18 @@ export default function GroupDetailPage() {
                             <p className="text-vintage-black/70 text-lg">{group.description}</p>
                         )}
                     </div>
-                    <Button onClick={() => setShowAddExpenseModal(true)} className="flex items-center gap-2">
-                        <Plus className="w-4 h-4" />
-                        Add Expense
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        {isAdmin && (
+                            <Button variant="outline" onClick={handleDeleteGroup} className="text-red-500 hover:bg-red-50 border-red-200">
+                                <Trash2 className="w-4 h-4 mr-2" />
+                                Delete Group
+                            </Button>
+                        )}
+                        <Button onClick={() => setShowAddExpenseModal(true)} className="flex items-center gap-2">
+                            <Plus className="w-4 h-4" />
+                            Add Expense
+                        </Button>
+                    </div>
                 </div>
             </div>
 
@@ -288,6 +330,15 @@ export default function GroupDetailPage() {
                                     </div>
                                     {member.user_id === user?.id && (
                                         <span className="text-xs text-vintage-amber">(You)</span>
+                                    )}
+                                    {isAdmin && member.user_id !== user?.id && (
+                                        <button
+                                            onClick={() => handleRemoveMember(member.id, member.name, member.user_id)}
+                                            className="p-1 text-red-400 hover:text-red-600 hover:bg-red-50 rounded"
+                                            title="Remove member"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
                                     )}
                                 </div>
                             ))}

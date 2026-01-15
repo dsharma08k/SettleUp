@@ -116,7 +116,11 @@ export async function pullFromSupabase(userId: string): Promise<{ success: boole
             for (const group of groups) {
                 const existing = await db.groups.get(group.id);
                 // Last-write-wins: only update if remote is newer or doesn't exist
-                if (!existing || new Date(group.last_modified_at) > new Date(existing.last_modified_at)) {
+                // Use getTime() for accurate comparison
+                const remoteTime = new Date(group.last_modified_at).getTime();
+                const localTime = existing ? new Date(existing.last_modified_at).getTime() : 0;
+
+                if (!existing || remoteTime > localTime) {
                     await db.groups.put(group);
                     pulledCount++;
                 }
@@ -132,8 +136,11 @@ export async function pullFromSupabase(userId: string): Promise<{ success: boole
         if (!membersError && members) {
             for (const member of members) {
                 const existing = await db.group_members.get(member.id);
-                if (!existing || new Date(member.last_modified_at) > new Date(existing.last_modified_at)) {
-                    await db.group_members.put(member);
+                const remoteTime = new Date(member.last_modified_at).getTime();
+                const localTime = existing ? new Date(existing.last_modified_at).getTime() : 0;
+
+                if (!existing || remoteTime > localTime) {
+                    await db.group_members.put(member as any); // Cast to any to avoid type complaints with Dexie interfaces
                     pulledCount++;
                 }
             }
@@ -148,7 +155,10 @@ export async function pullFromSupabase(userId: string): Promise<{ success: boole
         if (!expensesError && expenses) {
             for (const expense of expenses) {
                 const existing = await db.expenses.get(expense.id);
-                if (!existing || new Date(expense.last_modified_at) > new Date(existing.last_modified_at)) {
+                const remoteTime = new Date(expense.last_modified_at).getTime();
+                const localTime = existing ? new Date(existing.last_modified_at).getTime() : 0;
+
+                if (!existing || remoteTime > localTime) {
                     await db.expenses.put(expense);
                     pulledCount++;
                 }
@@ -166,7 +176,10 @@ export async function pullFromSupabase(userId: string): Promise<{ success: boole
             if (!splitsError && splits) {
                 for (const split of splits) {
                     const existing = await db.expense_splits.get(split.id);
-                    if (!existing || new Date(split.last_modified_at) > new Date(existing.last_modified_at)) {
+                    const remoteTime = new Date(split.last_modified_at).getTime();
+                    const localTime = existing ? new Date(existing.last_modified_at).getTime() : 0;
+
+                    if (!existing || remoteTime > localTime) {
                         await db.expense_splits.put(split);
                         pulledCount++;
                     }
